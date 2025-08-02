@@ -35,7 +35,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            corapanel/php:${{ github.event.inputs.php56Version }}-fpm
+            aikocute/php:${{ github.event.inputs.php56Version }}-fpm
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
