@@ -1,0 +1,113 @@
+name: Build PHP 8 Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      php84Version:
+        description: 'PHP 8.4 Version'
+        default: '8.4.6'
+        required: true
+      php83Version:
+        description: 'PHP 8.3 Version'
+        default: '8.3.20'
+        required: true
+      php82Version:
+        description: 'PHP 8.2 Version'
+        default: '8.2.28'
+        required: true
+      php81Version:
+        description: 'PHP 8.1 Version'
+        default: '8.1.31'
+        required: true
+      php80Version:
+        description: 'PHP 8.0 Version'
+        default: '8.0.30'
+        required: true
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build PHP-8.4 and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: php/7
+          file: php/7/Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/s390x
+          push: true
+          build-args:
+            PHP_VERSION=${{ github.event.inputs.php84Version }}
+          tags: |
+            corapanel/php:${{ github.event.inputs.php84Version }}-fpm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build PHP-8.3 and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: php/7
+          file: php/7/Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/s390x
+          push: true
+          build-args:
+            PHP_VERSION=${{ github.event.inputs.php83Version }}
+          tags: |
+            corapanel/php:${{ github.event.inputs.php83Version }}-fpm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build PHP-8.2 and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: php/7
+          file: php/7/Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/s390x
+          push: true
+          build-args:
+            PHP_VERSION=${{ github.event.inputs.php82Version }}
+          tags: |
+            corapanel/php:${{ github.event.inputs.php82Version }}-fpm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build PHP-8.1 and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: php/7
+          file: php/7/Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/s390x
+          push: true
+          build-args:
+            PHP_VERSION=${{ github.event.inputs.php81Version }}
+          tags: |
+            corapanel/php:${{ github.event.inputs.php81Version }}-fpm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build PHP-8.0 and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: php/7
+          file: php/7/Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/s390x
+          push: true
+          build-args:
+            PHP_VERSION=${{ github.event.inputs.php80Version }}
+          tags: |
+            corapanel/php:${{ github.event.inputs.php80Version }}-fpm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
